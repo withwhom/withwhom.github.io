@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seunghwan Ryu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f7f5f0;
+      --text: #1a1a18;
+      --muted: #7a7870;
+      --accent: #2e5d4b;
+      --accent-light: #e8f0ec;
+      --duo-green: #58cc02;
+      --duo-bg: #f0fce8;
+      --border: #e2dfd8;
+      --card: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(247,245,240,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding-top: 6rem;
+    }
+    .hero-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+      opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+    }
+    .hero h1 .korean {
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.52em;
+      display: block;
+      margin-top: 0.2rem;
+    }
+    .hero-desc {
+      margin-top: 2rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+      max-width: 480px;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex; gap: 1rem;
+      opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .btn {
+      text-decoration: none;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover { background: #234a3a; }
+    .btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-secondary:hover { background: var(--border); }
+
+    /* SECTIONS */
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 2.5rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text {
+      font-size: 0.97rem;
+      color: var(--muted);
+      line-height: 1.85;
+      font-weight: 300;
+    }
+    .about-text p + p { margin-top: 1rem; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .about-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .stat-item {
+      padding: 1.2rem 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .skill-card {
+      padding: 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .skill-icon { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .skill-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .skill-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* DUOLINGO */
+    .duo-card {
+      background: var(--duo-bg);
+      border: 1px solid #c8edaa;
+      border-radius: 8px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    .duo-logo-area {
+      text-align: center;
+    }
+    .duo-owl {
+      font-size: 3.5rem;
+      display: block;
+    }
+    .duo-username {
+      font-size: 0.75rem;
+      color: #3a7a1a;
+      margin-top: 0.4rem;
+      font-weight: 500;
+    }
+    .duo-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .duo-stat {
+      background: white;
+      border: 1px solid #c8edaa;
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+    }
+    .duo-stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--duo-green);
+      line-height: 1;
+    }
+    .duo-stat-lbl {
+      font-size: 0.75rem;
+      color: #5a7a3a;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+    .duo-langs {
+      grid-column: 1 / -1;
+      background: white;
+      border: 1px solid #c8edaa;
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+    }
+    .duo-langs-title {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #5a7a3a;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .lang-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #e8f5d8;
+    }
+    .lang-row:last-child { border-bottom: none; }
+    .lang-name { font-size: 0.88rem; font-weight: 500; }
+    .lang-xp {
+      font-size: 0.78rem;
+      color: #5a7a3a;
+      font-weight: 500;
+    }
+    .league-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, #ffd700, #ffb300);
+      color: #7a4a00;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      margin-top: 0.8rem;
+    }
+    .duo-note {
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .contact-icon { font-size: 1.3rem; }
+    .contact-label { font-size: 0.82rem; color: var(--muted); }
+    .contact-value { font-size: 0.92rem; font-weight: 500; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .about-grid, .skills-grid, .contact-grid { grid-template-columns: 1fr; }
+      .duo-card { grid-template-columns: 1fr; gap: 1.2rem; }
+      .duo-logo-area { display: flex; align-items: center; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SR</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#duolingo">Duolingo</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-label">Mathematics Education · Seoul, Korea</p>
+  <h1>
+    Seunghwan Ryu
+    <span class="korean">류승환</span>
+  </h1>
+  <p class="hero-desc">
+    A <strong>mathematics education student</strong> passionate about learning languages, understanding numbers, and exploring how ideas connect across disciplines.
+  </p>
+  <div class="hero-cta">
+    <a href="#about" class="btn btn-primary">Learn more</a>
+    <a href="#contact" class="btn btn-secondary">Get in touch</a>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">About</p>
+  <div class="about-grid">
+    <div>
+      <h2 class="section-title">Hello, I'm Seunghwan.</h2>
+      <div class="about-text">
+        <p>I'm a <strong>mathematics education major</strong> with a deep interest in how people think about and learn mathematical concepts. I believe mathematics is a universal language — one that bridges cultures and ways of thinking.</p>
+        <p>Beyond numbers, I'm an avid language learner. I use <strong>Duolingo</strong> daily to explore new languages, finding joy in the connections between linguistic and mathematical structures.</p>
+        <p>I'm always curious, always learning — and always happy to connect with like-minded people.</p>
+      </div>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-value">Math</div>
+        <div class="stat-label">Education major · undergraduate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">2+</div>
+        <div class="stat-label">Languages on Duolingo</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Curiosity level</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">Skills & Interests</p>
+  <h2 class="section-title">What I work with.</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">📐</div>
+      <div class="skill-name">Mathematics</div>
+      <div class="skill-desc">Analysis, algebra, and mathematical reasoning. Deep appreciation for proof and abstraction.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📚</div>
+      <div class="skill-name">Education</div>
+      <div class="skill-desc">Curriculum design, pedagogy, and how students develop mathematical thinking.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Language Learning</div>
+      <div class="skill-desc">Actively learning multiple languages with a structured, consistent daily practice.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🇰🇷</div>
+      <div class="skill-name">Korean</div>
+      <div class="skill-desc">Native speaker. Happy to discuss Korean math education culture and traditions.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔢</div>
+      <div class="skill-name">Problem Solving</div>
+      <div class="skill-desc">Structured thinking and creative approaches to mathematical and everyday challenges.</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎯</div>
+      <div class="skill-name">Consistency</div>
+      <div class="skill-desc">Daily streaks, steady habits, and long-term dedication to self-improvement.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DUOLINGO -->
+<section id="duolingo">
+  <p class="section-label">Language Learning</p>
+  <h2 class="section-title">My Duolingo journey.</h2>
+  <div class="duo-card">
+    <div class="duo-logo-area">
+      <span class="duo-owl">🦉</span>
+      <p class="duo-username">@seunghwanryu</p>
+      <div class="league-badge">🏆 Gold League</div>
+    </div>
+    <div>
+      <div class="duo-stats-grid">
+        <div class="duo-stat">
+          <div class="duo-stat-val">🔥 —</div>
+          <div class="duo-stat-lbl">Day Streak</div>
+        </div>
+        <div class="duo-stat">
+          <div class="duo-stat-val">— XP</div>
+          <div class="duo-stat-lbl">Total XP earned</div>
+        </div>
+        <div class="duo-langs">
+          <p class="duo-langs-title">Languages I'm learning</p>
+          <div class="lang-row">
+            <span class="lang-name">🇯🇵 Japanese</span>
+            <span class="lang-xp">— XP</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-name">🇪🇸 Spanish</span>
+            <span class="lang-xp">— XP</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-name">🇺🇸 English</span>
+            <span class="lang-xp">— XP</span>
+          </div>
+        </div>
+      </div>
+      <p class="duo-note">📝 These stats are updated manually — feel free to reach out for my latest streak!</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Let's connect.</h2>
+  <div class="contact-grid">
+    <a class="contact-link" href="mailto:your@email.com">
+      <span class="contact-icon">✉️</span>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">your@email.com</div>
+      </div>
+    </a>
+    <a class="contact-link" href="https://duolingo.com/profile/seunghwanryu" target="_blank">
+      <span class="contact-icon">🦉</span>
+      <div>
+        <div class="contact-label">Duolingo</div>
+        <div class="contact-value">Follow my journey</div>
+      </div>
+    </a>
+    <a class="contact-link" href="#">
+      <span class="contact-icon">🐙</span>
+      <div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">@seunghwanryu</div>
+      </div>
+    </a>
+    <a class="contact-link" href="#">
+      <span class="contact-icon">💼</span>
+      <div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">Seunghwan Ryu</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Seunghwan Ryu (류승환) · Mathematics Education</p>
+</footer>
+
+</body>
+</html>
