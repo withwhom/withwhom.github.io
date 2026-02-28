@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Seunghwan Ryu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
+    /* LIGHT MODE */
     :root {
       --bg: #f7f5f0;
       --text: #1a1a18;
@@ -16,6 +17,21 @@
       --duo-bg: #f0fce8;
       --border: #e2dfd8;
       --card: #ffffff;
+      --nav-bg: rgba(247,245,240,0.85);
+    }
+
+    /* DARK MODE */
+    [data-theme="dark"] {
+      --bg: #111110;
+      --text: #edeae3;
+      --muted: #8a8780;
+      --accent: #4a9b78;
+      --accent-light: #1a2e24;
+      --duo-green: #58cc02;
+      --duo-bg: #0e1f0a;
+      --border: #2a2925;
+      --card: #1c1c1a;
+      --nav-bg: rgba(17,17,16,0.88);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,6 +41,7 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
     }
 
     /* NAV */
@@ -32,10 +49,11 @@
       position: fixed; top: 0; left: 0; right: 0;
       padding: 1.2rem 3rem;
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(247,245,240,0.85);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       z-index: 100;
+      transition: background 0.3s, border-color 0.3s;
     }
     .nav-logo {
       font-family: 'Cormorant Garamond', serif;
@@ -43,6 +61,7 @@
       font-weight: 600;
       letter-spacing: 0.02em;
     }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
     .nav-links { display: flex; gap: 2rem; }
     .nav-links a {
       text-decoration: none;
@@ -54,6 +73,22 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--text); }
+
+    /* DARK MODE TOGGLE */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
 
     /* HERO */
     .hero {
@@ -85,11 +120,14 @@
       opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
     }
     .hero h1 .korean {
-      font-style: italic;
+      font-family: 'Noto Serif KR', serif;
+      font-style: normal;
+      font-weight: 300;
       color: var(--muted);
-      font-size: 0.52em;
+      font-size: 0.42em;
       display: block;
-      margin-top: 0.2rem;
+      margin-top: 0.3rem;
+      letter-spacing: 0.12em;
     }
     .hero-desc {
       margin-top: 2rem;
@@ -115,11 +153,8 @@
       border-radius: 2px;
       transition: all 0.2s;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-    }
-    .btn-primary:hover { background: #234a3a; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { opacity: 0.85; }
     .btn-secondary {
       border: 1px solid var(--border);
       color: var(--text);
@@ -165,16 +200,13 @@
     }
     .about-text p + p { margin-top: 1rem; }
     .about-text strong { color: var(--text); font-weight: 500; }
-    .about-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
+    .about-stats { display: flex; flex-direction: column; gap: 1.5rem; }
     .stat-item {
       padding: 1.2rem 1.4rem;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 4px;
+      transition: background 0.3s, border-color 0.3s;
     }
     .stat-value {
       font-family: 'Cormorant Garamond', serif;
@@ -201,23 +233,12 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 4px;
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.2s, transform 0.2s, background 0.3s;
     }
-    .skill-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .skill-icon { font-size: 1.4rem; margin-bottom: 0.7rem; }
-    .skill-name {
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-    }
-    .skill-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
+    .skill-name { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.3rem; }
+    .skill-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 
     /* DUOLINGO */
     .duo-card {
@@ -229,31 +250,22 @@
       grid-template-columns: auto 1fr;
       gap: 2rem;
       align-items: start;
+      transition: background 0.3s;
     }
-    .duo-logo-area {
-      text-align: center;
-    }
-    .duo-owl {
-      font-size: 3.5rem;
-      display: block;
-    }
-    .duo-username {
-      font-size: 0.75rem;
-      color: #3a7a1a;
-      margin-top: 0.4rem;
-      font-weight: 500;
-    }
-    .duo-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
+    [data-theme="dark"] .duo-card { border-color: #2a4a1a; }
+    .duo-logo-area { text-align: center; }
+    .duo-owl { font-size: 3.5rem; display: block; }
+    .duo-username { font-size: 0.75rem; color: #3a7a1a; margin-top: 0.4rem; font-weight: 500; }
+    [data-theme="dark"] .duo-username { color: #6aaa3a; }
+    .duo-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .duo-stat {
-      background: white;
+      background: var(--card);
       border: 1px solid #c8edaa;
       border-radius: 6px;
       padding: 1rem 1.2rem;
+      transition: background 0.3s;
     }
+    [data-theme="dark"] .duo-stat { border-color: #2a4a1a; }
     .duo-stat-val {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.8rem;
@@ -261,19 +273,17 @@
       color: var(--duo-green);
       line-height: 1;
     }
-    .duo-stat-lbl {
-      font-size: 0.75rem;
-      color: #5a7a3a;
-      margin-top: 0.25rem;
-      font-weight: 500;
-    }
+    .duo-stat-lbl { font-size: 0.75rem; color: #5a7a3a; margin-top: 0.25rem; font-weight: 500; }
+    [data-theme="dark"] .duo-stat-lbl { color: #7aaa5a; }
     .duo-langs {
       grid-column: 1 / -1;
-      background: white;
+      background: var(--card);
       border: 1px solid #c8edaa;
       border-radius: 6px;
       padding: 1rem 1.2rem;
+      transition: background 0.3s;
     }
+    [data-theme="dark"] .duo-langs { border-color: #2a4a1a; }
     .duo-langs-title {
       font-size: 0.72rem;
       letter-spacing: 0.08em;
@@ -282,6 +292,7 @@
       font-weight: 600;
       margin-bottom: 0.8rem;
     }
+    [data-theme="dark"] .duo-langs-title { color: #7aaa5a; }
     .lang-row {
       display: flex;
       justify-content: space-between;
@@ -289,13 +300,11 @@
       padding: 0.4rem 0;
       border-bottom: 1px solid #e8f5d8;
     }
+    [data-theme="dark"] .lang-row { border-bottom-color: #1a3a0a; }
     .lang-row:last-child { border-bottom: none; }
     .lang-name { font-size: 0.88rem; font-weight: 500; }
-    .lang-xp {
-      font-size: 0.78rem;
-      color: #5a7a3a;
-      font-weight: 500;
-    }
+    .lang-xp { font-size: 0.78rem; color: #5a7a3a; font-weight: 500; }
+    [data-theme="dark"] .lang-xp { color: #7aaa5a; }
     .league-badge {
       display: inline-flex;
       align-items: center;
@@ -308,19 +317,10 @@
       border-radius: 20px;
       margin-top: 0.8rem;
     }
-    .duo-note {
-      margin-top: 1rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-style: italic;
-    }
+    .duo-note { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); font-style: italic; }
 
     /* CONTACT */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .contact-link {
       display: flex;
       align-items: center;
@@ -333,10 +333,7 @@
       color: var(--text);
       transition: all 0.2s;
     }
-    .contact-link:hover {
-      border-color: var(--accent);
-      background: var(--accent-light);
-    }
+    .contact-link:hover { border-color: var(--accent); background: var(--accent-light); }
     .contact-icon { font-size: 1.3rem; }
     .contact-label { font-size: 0.82rem; color: var(--muted); }
     .contact-value { font-size: 0.92rem; font-weight: 500; }
@@ -371,11 +368,14 @@
 
 <nav>
   <div class="nav-logo">SR</div>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#duolingo">Duolingo</a>
-    <a href="#contact">Contact</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#duolingo">Duolingo</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
   </div>
 </nav>
 
@@ -540,8 +540,31 @@
 </section>
 
 <footer>
-  <p>© 2026 Seunghwan Ryu (류승환) · Mathematics Education</p>
+  <p>© 2026 Seunghwan Ryu <span style="font-family:'Noto Serif KR',serif;font-weight:300;letter-spacing:0.08em;">(류승환)</span> · Mathematics Education</p>
 </footer>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.getElementById('theme-btn');
+    if (html.getAttribute('data-theme') === 'light') {
+      html.setAttribute('data-theme', 'dark');
+      btn.textContent = '☀️';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      btn.textContent = '🌙';
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Restore saved preference on load
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+</script>
 
 </body>
 </html>
