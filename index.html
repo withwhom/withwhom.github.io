@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seunghwan Ryu — a mathematical scrapbook</title>
+<script>
+  (function() {
+    try {
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch (e) { /* storage unavailable — keep the default light theme */ }
+  })();
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #faf4f5;
+    --ink: #262022;
+    --muted: #86797c;
+    --accent: #8a2237;
+    --line: #efeceb;
+    --panel-line: #efdde1;
+  }
+  [data-theme="dark"] {
+    --bg: #151012;
+    --surface: #201719;
+    --ink: #ece7e8;
+    --muted: #a2969a;
+    --accent: #d98b9b;
+    --line: #322629;
+    --panel-line: #3d2d31;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 17px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Charter", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    line-height: 1.7;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .frame {
+    position: relative;
+    max-width: 66rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 5rem;
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    gap: 4.5rem;
+  }
+
+  /* ---- theme toggle ---- */
+  .theme-toggle {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.25s ease, color 0.15s ease, border-color 0.25s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ================= sidebar ================= */
+  aside { position: sticky; top: 4rem; align-self: start; }
+  .name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+  }
+  .name-ko { color: var(--muted); font-weight: 400; font-size: 1rem; margin-top: 0.15rem; }
+  .affiliation {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 0.9rem;
+    line-height: 1.5;
+  }
+  .tagline {
+    color: var(--accent);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-top: 0.7rem;
+  }
+  .q-mark { color: var(--accent); font-weight: 700; margin-right: 0.45rem; }
+  .side-nav { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  .side-nav a { font-size: 0.95rem; width: fit-content; }
+  .side-nav a::before {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-right: 0;
+    transition: width 0.18s ease, margin-right 0.18s ease;
+  }
+  .side-nav a:hover::before { width: 0.9rem; margin-right: 0.45rem; }
+
+  .now {
+    margin-top: 2.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .now-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .now p + p { margin-top: 0.25rem; }
+  .side-contact {
+    margin-top: 2.4rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .side-contact a { color: var(--accent); }
+
+  /* ================= main ================= */
+  .intro {
+    font-size: 1.28rem;
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 36rem;
+    margin-bottom: 3rem;
+  }
+  .intro strong { font-weight: 600; }
+
+  /* featured theorem panel */
+  .notebook {
+    background: var(--surface);
+    border: 1px solid var(--panel-line);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    border-radius: 16px;
+    padding: 1.8rem 2rem 1.6rem;
+    margin-bottom: 3.5rem;
+  }
+  .notebook-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.1rem;
+    gap: 1rem;
+  }
+  .notebook-caption { font-size: 0.92rem; font-style: italic; }
+  .notebook-tag { font-size: 0.8rem; color: var(--accent); white-space: nowrap; }
+  .thm, .proof { font-size: 1rem; line-height: 1.7; }
+  .thm { margin-bottom: 0.8rem; }
+  .thm-head { font-weight: 700; }
+  .thm-body { font-style: italic; }
+  .proof-head { font-style: italic; }
+  .qed { float: right; }
+  .katex { font-size: 1.03em; }
+
+  section { margin-bottom: 3.2rem; }
+  h2 {
+    font-size: 1.02rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 1.3rem;
+  }
+  .entry {
+    padding: 1.05rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .entry:last-child { border-bottom: 1px solid var(--line); }
+  .entry-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+  .entry-title { font-weight: 700; font-size: 1.02rem; }
+  .entry-meta { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+  .entry-desc { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; max-width: 34rem; }
+
+  footer {
+    color: var(--muted);
+    font-size: 0.82rem;
+    padding-top: 1.2rem;
+  }
+
+  @media (max-width: 760px) {
+    .frame {
+      grid-template-columns: 1fr;
+      gap: 2.6rem;
+      padding-top: 2.6rem;
+    }
+    .theme-toggle { top: 1rem; right: 1.2rem; }
+    aside { position: static; }
+    .side-nav { flex-direction: row; flex-wrap: wrap; gap: 1.1rem; }
+    .side-nav a::before { display: none; }
+    .now { display: none; }
+    .intro { font-size: 1.15rem; }
+    .notebook { padding: 1.4rem 1.3rem 1.2rem; }
+    .entry-row { flex-direction: column; gap: 0.1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+
+<aside>
+  <div class="name">Seunghwan Ryu<div class="name-ko">류승환</div></div>
+  <p class="affiliation">Mathematics Education,<br>Seoul National University</p>
+  <p class="tagline">a mathematical scrapbook</p>
+  <nav class="side-nav">
+    <a href="#scraps">Scraps</a>
+    <a href="#questions">Open questions</a>
+  </nav>
+  <div class="now">
+    <p class="now-title">Now</p>
+    <p>Reading — Fraleigh, ch. 10</p>
+    <p>Listening — Laufey</p>
+  </div>
+  <p class="side-contact">
+    <a href="#">GitHub</a>
+  </p>
+</aside>
+
+<main>
+  <p class="intro">This is my <strong>mathematical scrapbook</strong> — things I learn,
+  questions I chase, and notes written up after study sessions, kept here so that
+  learning leaves a trace.</p>
+
+  <div class="notebook">
+    <div class="notebook-top">
+      <span class="notebook-caption">Latest scrap</span>
+      <span class="notebook-tag">Fraleigh §10 · Abstract Algebra</span>
+    </div>
+    <div class="thm">
+      <span class="thm-head">Theorem 1 (Lagrange).</span>
+      <span class="thm-body">Let \(G\) be a finite group and let \(H \leq G\) be a subgroup.
+      Then \(|H|\) divides \(|G|\).</span>
+    </div>
+    <div class="proof">
+      <span class="proof-head">Proof sketch.</span>
+      The left cosets of \(H\) partition \(G\), and each coset \(gH\) has exactly \(|H|\)
+      elements, since \(h \mapsto gh\) is a bijection \(H \to gH\). Writing \([G:H]\) for
+      the number of cosets,
+      $$|G| = [G : H]\,|H|.$$
+      <span class="qed">\(\blacksquare\)</span>
+    </div>
+  </div>
+
+  <section id="scraps">
+    <h2>Scraps</h2>
+    <div class="entry">
+      <div class="entry-row">
+        <a class="entry-title" href="#">Cosets and Lagrange's theorem</a>
+        <span class="entry-meta">Sep 2026 · group theory</span>
+      </div>
+      <p class="entry-desc">Why the partition argument works, and what fails for infinite groups.</p>
+    </div>
+    <div class="entry">
+      <div class="entry-row">
+        <a class="entry-title" href="#">A circularity in a standard proof about isometries</a>
+        <span class="entry-meta">Aug 2026 · linear algebra</span>
+      </div>
+      <p class="entry-desc">A gap I found in a proof that origin-fixing isometries are linear,
+      and two ways to repair it.</p>
+    </div>
+    <div class="entry">
+      <div class="entry-row">
+        <a class="entry-title" href="#">Impulse forcing and jump conditions</a>
+        <span class="entry-meta">Jul 2026 · ODE</span>
+      </div>
+      <p class="entry-desc">How \(\delta\)-function forcing in Laplace-transform methods produces
+      discontinuities in derivatives of solutions.</p>
+    </div>
+  </section>
+
+  <section id="questions">
+    <h2>Open questions</h2>
+    <div class="entry">
+      <div class="entry-row">
+        <span class="entry-title" style="font-weight: 400;"><span class="q-mark">Q.</span>For
+        which groups does the converse of Lagrange's theorem hold?</span>
+      </div>
+      <p class="entry-desc">Every subgroup order divides \(|G|\) — but when does every divisor
+      of \(|G|\) give a subgroup?</p>
+    </div>
+    <div class="entry">
+      <div class="entry-row">
+        <span class="entry-title" style="font-weight: 400;"><span class="q-mark">Q.</span>Why
+        does the operator view of linear ODEs feel so much like linear algebra?</span>
+      </div>
+      <p class="entry-desc">Solution spaces, kernels, superposition — what exactly is the
+      shared structure underneath?</p>
+    </div>
+  </section>
+
+  <footer>
+    Last updated September 2026 · Built with plain HTML · Hosted on GitHub Pages
+  </footer>
+</main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ]
+    });
+
+    var toggle = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+
+    function syncToggle() {
+      var dark = root.getAttribute("data-theme") === "dark";
+      toggle.textContent = dark ? "☀" : "☾";
+      toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    }
+    syncToggle();
+
+    toggle.addEventListener("click", function() {
+      var toDark = root.getAttribute("data-theme") !== "dark";
+      root.setAttribute("data-theme", toDark ? "dark" : "light");
+      syncToggle();
+      try {
+        localStorage.setItem("theme", toDark ? "dark" : "light");
+      } catch (e) { /* storage unavailable — theme still switches, just not remembered */ }
+    });
+  });
+</script>
+</body>
+</html>
