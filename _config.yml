@@ -12,13 +12,13 @@ author:
 permalink: /scraps/:title/
 future: true          # never hide a scrap because of a timezone edge
 
-# Markdown. Math is rendered client-side by KaTeX, so kramdown must not
-# touch $$…$$ itself: with no math engine it wraps the raw TeX in
-# <span class="kdmath"> / <div class="kdmath">, which the layout renders.
+# Markdown. kramdown's MathJax engine turns $$…$$ into \(…\) inline and
+# \[…\] display; the layout renders those with KaTeX auto-render. (GitHub
+# Pages ignores math_engine: ~, so the engine is set explicitly.)
 markdown: kramdown
 kramdown:
   input: GFM
-  math_engine: ~
+  math_engine: mathjax
   hard_wrap: false
 
 # GitHub Pages whitelist only.

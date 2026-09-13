@@ -35,10 +35,11 @@ Notes:
 
 - `layout`, `title`, `date`, `tags` are required; `source` is optional and is
   shown as the small-caps label on the panel and the scrap page.
-- Math: write `$$…$$` for both inline and display in Markdown. (KaTeX's
-  `\( \)` delimiters only work in raw HTML blocks, because kramdown eats the
-  backslashes in ordinary Markdown text.) kramdown decides inline vs display
-  by placement: inside a paragraph is inline, on its own lines is display.
+- Math: write `$$…$$` for both inline and display in Markdown. kramdown
+  decides inline vs display by placement (inside a paragraph is inline, on
+  its own lines is display) and emits `\( \)` or `\[ \]`, which KaTeX
+  renders in the browser. Writing `\( \)` directly only works in raw HTML
+  blocks, because kramdown eats the backslashes in ordinary Markdown text.
 - Never write a bare `|` inside `$$…$$` in Markdown or YAML text. kramdown
   parses tables before math, so a one-line paragraph containing `|` turns into
   a table. Use `\lvert G \rvert`, `\vert`, or `\mid` instead (`\|` will not
