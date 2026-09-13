@@ -17,21 +17,21 @@
 <style>
   :root {
     --bg: #ffffff;
-    --surface: #faf4f5;
+    --surface: #faf5f4;
     --ink: #262022;
-    --muted: #86797c;
-    --accent: #8a2237;
-    --line: #efeceb;
-    --panel-line: #efdde1;
+    --muted: #85787b;
+    --accent: #8a2237;   /* burgundy */
+    --accent2: #8f6f25;  /* antique gold */
+    --line: #eae5e3;
   }
   [data-theme="dark"] {
-    --bg: #151012;
-    --surface: #201719;
+    --bg: #161113;
+    --surface: #211a1c;
     --ink: #ece7e8;
-    --muted: #a2969a;
+    --muted: #a3979b;
     --accent: #d98b9b;
-    --line: #322629;
-    --panel-line: #3d2d31;
+    --accent2: #cfa85c;
+    --line: #342a2d;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 17px; }
@@ -42,6 +42,7 @@
     line-height: 1.7;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
+  ::selection { background: var(--accent); color: #fff; }
   a { color: inherit; text-decoration: none; }
   a:hover { color: var(--accent); }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
@@ -63,7 +64,7 @@
     right: 1.5rem;
     width: 2.2rem;
     height: 2.2rem;
-    border-radius: 50%;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--surface);
     color: var(--muted);
@@ -99,7 +100,6 @@
     font-size: 0.9rem;
     margin-top: 0.7rem;
   }
-  .q-mark { color: var(--accent); font-weight: 700; margin-right: 0.45rem; }
   .side-nav { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.45rem; }
   .side-nav a { font-size: 0.95rem; width: fit-content; }
   .side-nav a::before {
@@ -122,9 +122,10 @@
     color: var(--muted);
   }
   .now-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--ink);
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    color: var(--accent2);
     margin-bottom: 0.5rem;
   }
   .now p + p { margin-top: 0.25rem; }
@@ -137,22 +138,19 @@
 
   /* ================= main ================= */
   .intro {
-    font-size: 1.28rem;
-    line-height: 1.55;
-    font-weight: 400;
+    font-size: 1.26rem;
+    line-height: 1.58;
     max-width: 36rem;
     margin-bottom: 3rem;
   }
-  .intro strong { font-weight: 600; }
 
-  /* featured theorem panel */
+  /* featured scrap — print-style double rule instead of a card */
   .notebook {
-    background: var(--surface);
-    border: 1px solid var(--panel-line);
-    transition: background-color 0.25s ease, border-color 0.25s ease;
-    border-radius: 16px;
-    padding: 1.8rem 2rem 1.6rem;
+    border-top: 3px double var(--accent);
+    border-bottom: 1px solid var(--line);
+    padding: 1.5rem 0 1.3rem;
     margin-bottom: 3.5rem;
+    transition: border-color 0.25s ease;
   }
   .notebook-top {
     display: flex;
@@ -161,23 +159,36 @@
     margin-bottom: 1.1rem;
     gap: 1rem;
   }
-  .notebook-caption { font-size: 0.92rem; font-style: italic; }
-  .notebook-tag { font-size: 0.8rem; color: var(--accent); white-space: nowrap; }
+  .notebook-caption { font-size: 0.92rem; font-style: italic; color: var(--muted); }
+  .notebook-tag {
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
   .thm, .proof { font-size: 1rem; line-height: 1.7; }
   .thm { margin-bottom: 0.8rem; }
   .thm-head { font-weight: 700; }
   .thm-body { font-style: italic; }
   .proof-head { font-style: italic; }
   .qed { float: right; }
+  .panel-note {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--muted);
+  }
   .katex { font-size: 1.03em; }
 
   section { margin-bottom: 3.2rem; }
   h2 {
-    font-size: 1.02rem;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--muted);
-    margin-bottom: 1.3rem;
+    font-variant: small-caps;
+    letter-spacing: 0.09em;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--accent2);
+    margin-bottom: 1.2rem;
   }
   .entry {
     padding: 1.05rem 0;
@@ -191,7 +202,11 @@
     gap: 1.5rem;
   }
   .entry-title { font-weight: 700; font-size: 1.02rem; }
+  a.entry-title:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  .q-title { font-weight: 400; font-size: 1.02rem; }
+  .q-mark { color: var(--accent); font-weight: 700; margin-right: 0.45rem; }
   .entry-meta { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+  .entry-meta .tag { color: var(--accent2); margin-left: 0.5rem; }
   .entry-desc { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; max-width: 34rem; }
 
   footer {
@@ -212,7 +227,6 @@
     .side-nav a::before { display: none; }
     .now { display: none; }
     .intro { font-size: 1.15rem; }
-    .notebook { padding: 1.4rem 1.3rem 1.2rem; }
     .entry-row { flex-direction: column; gap: 0.1rem; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -235,8 +249,8 @@
   </nav>
   <div class="now">
     <p class="now-title">Now</p>
-    <p>Reading — Fraleigh, ch. 10</p>
-    <p>Listening — Laufey</p>
+    <p>Reading: Fraleigh, ch. 10</p>
+    <p>Listening: Laufey</p>
   </div>
   <p class="side-contact">
     <a href="https://github.com/withwhom">GitHub</a>
@@ -244,14 +258,13 @@
 </aside>
 
 <main>
-  <p class="intro">This is my <strong>mathematical scrapbook</strong> — things I learn,
-  questions I chase, and notes written up after study sessions, kept here so that
-  learning leaves a trace.</p>
+  <p class="intro">Study notes, mostly mathematics. I write these up after each session,
+  before I forget what confused me — the confusion is usually the interesting part.</p>
 
   <div class="notebook">
     <div class="notebook-top">
       <span class="notebook-caption">Latest scrap</span>
-      <span class="notebook-tag">Fraleigh §10 · Abstract Algebra</span>
+      <span class="notebook-tag">Fraleigh §10</span>
     </div>
     <div class="thm">
       <span class="thm-head">Theorem 1 (Lagrange).</span>
@@ -266,6 +279,8 @@
       $$|G| = [G : H]\,|H|.$$
       <span class="qed">\(\blacksquare\)</span>
     </div>
+    <p class="panel-note">* An immediate corollary: the order of every element of \(G\)
+    divides \(|G|\).</p>
   </div>
 
   <section id="scraps">
@@ -273,25 +288,26 @@
     <div class="entry">
       <div class="entry-row">
         <a class="entry-title" href="#">Cosets and Lagrange's theorem</a>
-        <span class="entry-meta">Sep 2026 · group theory</span>
+        <span class="entry-meta">Sep 2026<span class="tag">group theory</span></span>
       </div>
-      <p class="entry-desc">Why the partition argument works, and what fails for infinite groups.</p>
+      <p class="entry-desc">Reading notes on Fraleigh §10. Why the partition argument works,
+      and what breaks for infinite groups.</p>
     </div>
     <div class="entry">
       <div class="entry-row">
         <a class="entry-title" href="#">A circularity in a standard proof about isometries</a>
-        <span class="entry-meta">Aug 2026 · linear algebra</span>
+        <span class="entry-meta">Aug 2026<span class="tag">linear algebra</span></span>
       </div>
-      <p class="entry-desc">A gap I found in a proof that origin-fixing isometries are linear,
-      and two ways to repair it.</p>
+      <p class="entry-desc">A textbook proof that origin-fixing isometries are linear turns out
+      to assume what it proves. Two ways to fix it.</p>
     </div>
     <div class="entry">
       <div class="entry-row">
         <a class="entry-title" href="#">Impulse forcing and jump conditions</a>
-        <span class="entry-meta">Jul 2026 · ODE</span>
+        <span class="entry-meta">Jul 2026<span class="tag">ODE</span></span>
       </div>
-      <p class="entry-desc">How \(\delta\)-function forcing in Laplace-transform methods produces
-      discontinuities in derivatives of solutions.</p>
+      <p class="entry-desc">\(\delta\)-function forcing in Laplace methods, and where the jump
+      in \(df/dt\) actually comes from.</p>
     </div>
   </section>
 
@@ -299,24 +315,24 @@
     <h2>Open questions</h2>
     <div class="entry">
       <div class="entry-row">
-        <span class="entry-title" style="font-weight: 400;"><span class="q-mark">Q.</span>For
-        which groups does the converse of Lagrange's theorem hold?</span>
+        <span class="q-title"><span class="q-mark">Q.</span>For which groups does the converse
+        of Lagrange's theorem hold?</span>
       </div>
-      <p class="entry-desc">Every subgroup order divides \(|G|\) — but when does every divisor
-      of \(|G|\) give a subgroup?</p>
+      <p class="entry-desc">Every subgroup order divides \(|G|\). When does every divisor
+      of \(|G|\) come from a subgroup?</p>
     </div>
     <div class="entry">
       <div class="entry-row">
-        <span class="entry-title" style="font-weight: 400;"><span class="q-mark">Q.</span>Why
-        does the operator view of linear ODEs feel so much like linear algebra?</span>
+        <span class="q-title"><span class="q-mark">Q.</span>Why does the operator view of
+        linear ODEs feel so much like linear algebra?</span>
       </div>
-      <p class="entry-desc">Solution spaces, kernels, superposition — what exactly is the
-      shared structure underneath?</p>
+      <p class="entry-desc">Kernels, superposition, solution spaces. What is the shared
+      structure underneath?</p>
     </div>
   </section>
 
   <footer>
-    Last updated September 2026 · Built with plain HTML · Hosted on GitHub Pages
+    Kept since September 2026. Set in Charter, with math by KaTeX.
   </footer>
 </main>
 
