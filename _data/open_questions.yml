@@ -1,0 +1,11 @@
+# Open questions shown on the home page. Markdown and $$…$$ math both work.
+# `note` is optional.
+- question: For which groups does the converse of Lagrange's theorem hold?
+  note: >-
+    Every subgroup order divides $$\lvert G \rvert$$. When does every divisor of $$\lvert G \rvert$$
+    come from a subgroup?
+
+- question: Why does the operator view of linear ODEs feel so much like linear algebra?
+  note: >-
+    Kernels, superposition, solution spaces. What is the shared structure
+    underneath?
