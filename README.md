@@ -50,7 +50,7 @@ Notes:
 ## Open questions
 
 Edit `_data/open_questions.yml`. Each item has a `question` and an optional
-`note`; both accept Markdown and `$$…$$` math.
+`context`; both accept Markdown and `$$…$$` math.
 
 ## Local preview
 

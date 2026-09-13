@@ -40,8 +40,8 @@ layout: default
       <div class="entry-row">
         <span class="q-title"><span class="q-mark">Q.</span>{{ q.question | markdownify | strip | remove: "<p>" | remove: "</p>" }}</span>
       </div>
-{% if q.note %}
-      <div class="entry-desc">{{ q.note | markdownify }}</div>
+{% if q.context %}
+      <div class="entry-desc">{{ q.context | markdownify }}</div>
 {% endif %}
     </div>
 {% endfor %}
