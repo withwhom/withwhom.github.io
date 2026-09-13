@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en" }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}</title>
+{% if page.excerpt %}<meta name="description" content="{{ page.excerpt | strip_html | normalize_whitespace | truncate: 160 | escape }}">{% else %}<meta name="description" content="{{ site.description | escape }}">{% endif %}
+<script>
+  (function() {
+    try {
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch (e) { /* storage unavailable — keep the default light theme */ }
+  })();
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+{% feed_meta %}
+</head>
+<body>
+<div class="frame">
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+
+<aside>
+  <div class="name"><a href="{{ '/' | relative_url }}">Seunghwan Ryu</a><div class="name-ko">류승환</div></div>
+  <p class="affiliation">Mathematics Education,<br>Seoul National University</p>
+  <p class="tagline">a mathematical scrapbook</p>
+  <nav class="side-nav">
+    <a href="{{ '/' | relative_url }}#scraps">Scraps</a>
+    <a href="{{ '/' | relative_url }}#questions">Open questions</a>
+  </nav>
+  <div class="now">
+    <p class="now-title">Now</p>
+    <p>Reading: Fraleigh, ch. 10</p>
+    <p>Listening: Laufey</p>
+  </div>
+  <p class="side-contact">
+    <a href="https://github.com/withwhom">GitHub</a>
+    · <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+  </p>
+</aside>
+
+<main>
+{{ content }}
+
+  <footer>
+    Kept since September 2026. Set in Charter, with math by KaTeX.
+  </footer>
+</main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Math written in Markdown as $$…$$ arrives from kramdown wrapped in
+    // .kdmath (span = inline, div = display) with the dollar signs kept.
+    document.querySelectorAll(".kdmath").forEach(function(el) {
+      var tex = el.textContent.trim().replace(/^\$\$?/, "").replace(/\$\$?$/, "");
+      katex.render(tex, el, { displayMode: el.tagName === "DIV", throwOnError: false });
+    });
+
+    // Math written directly in HTML: \( \) inline, $$ $$ display.
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ]
+    });
+
+    var toggle = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+
+    function syncToggle() {
+      var dark = root.getAttribute("data-theme") === "dark";
+      toggle.textContent = dark ? "☀" : "☾";
+      toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    }
+    syncToggle();
+
+    toggle.addEventListener("click", function() {
+      var toDark = root.getAttribute("data-theme") !== "dark";
+      root.setAttribute("data-theme", toDark ? "dark" : "light");
+      syncToggle();
+      try {
+        localStorage.setItem("theme", toDark ? "dark" : "light");
+      } catch (e) { /* storage unavailable — theme still switches, just not remembered */ }
+    });
+  });
+</script>
+</body>
+</html>

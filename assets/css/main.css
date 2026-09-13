@@ -1,0 +1,293 @@
+:root {
+  --bg: #ffffff;
+  --surface: #faf5f4;
+  --ink: #262022;
+  --muted: #85787b;
+  --accent: #8a2237;   /* burgundy */
+  --accent2: #8f6f25;  /* antique gold */
+  --line: #eae5e3;
+}
+[data-theme="dark"] {
+  --bg: #161113;
+  --surface: #211a1c;
+  --ink: #ece7e8;
+  --muted: #a3979b;
+  --accent: #d98b9b;
+  --accent2: #cfa85c;
+  --line: #342a2d;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 17px; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Charter", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  line-height: 1.7;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+::selection { background: var(--accent); color: #fff; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.frame {
+  position: relative;
+  max-width: 66rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: 4.5rem;
+}
+
+/* ---- theme toggle ---- */
+.theme-toggle {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.25s ease, color 0.15s ease, border-color 0.25s ease;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ================= sidebar ================= */
+aside { position: sticky; top: 4rem; align-self: start; }
+.name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+.name-ko { color: var(--muted); font-weight: 400; font-size: 1rem; margin-top: 0.15rem; }
+.affiliation {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.9rem;
+  line-height: 1.5;
+}
+.tagline {
+  color: var(--accent);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 0.7rem;
+}
+.side-nav { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.side-nav a { font-size: 0.95rem; width: fit-content; }
+.side-nav a::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-right: 0;
+  transition: width 0.18s ease, margin-right 0.18s ease;
+}
+.side-nav a:hover::before { width: 0.9rem; margin-right: 0.45rem; }
+
+.now {
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.now-title {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  margin-bottom: 0.5rem;
+}
+.now p + p { margin-top: 0.25rem; }
+.side-contact {
+  margin-top: 2.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.side-contact a { color: var(--accent); }
+
+/* ================= main ================= */
+.intro {
+  font-size: 1.26rem;
+  line-height: 1.58;
+  max-width: 36rem;
+  margin-bottom: 3rem;
+}
+
+/* featured scrap — print-style double rule instead of a card */
+.notebook {
+  border-top: 3px double var(--accent);
+  border-bottom: 1px solid var(--line);
+  padding: 1.5rem 0 1.3rem;
+  margin-bottom: 3.5rem;
+  transition: border-color 0.25s ease;
+}
+.notebook-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.1rem;
+  gap: 1rem;
+}
+.notebook-caption { font-size: 0.92rem; font-style: italic; color: var(--muted); }
+.notebook-tag {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  white-space: nowrap;
+}
+.thm, .proof { font-size: 1rem; line-height: 1.7; }
+.thm { margin-bottom: 0.8rem; }
+.thm-head { font-weight: 700; }
+.thm-body { font-style: italic; }
+.proof-head { font-style: italic; }
+.qed { float: right; }
+.panel-note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+}
+.katex { font-size: 1.03em; }
+
+section { margin-bottom: 3.2rem; }
+h2 {
+  font-variant: small-caps;
+  letter-spacing: 0.09em;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--accent2);
+  margin-bottom: 1.2rem;
+}
+.entry {
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--line);
+}
+.entry:last-child { border-bottom: 1px solid var(--line); }
+.entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+.entry-title { font-weight: 700; font-size: 1.02rem; }
+a.entry-title:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.q-title { font-weight: 400; font-size: 1.02rem; }
+.q-mark { color: var(--accent); font-weight: 700; margin-right: 0.45rem; }
+.entry-meta { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+.entry-meta .tag { color: var(--accent2); margin-left: 0.5rem; }
+.entry-desc { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; max-width: 34rem; }
+
+footer {
+  color: var(--muted);
+  font-size: 0.82rem;
+  padding-top: 1.2rem;
+}
+
+@media (max-width: 760px) {
+  .frame {
+    grid-template-columns: 1fr;
+    gap: 2.6rem;
+    padding-top: 2.6rem;
+  }
+  .theme-toggle { top: 1rem; right: 1.2rem; }
+  aside { position: static; }
+  .side-nav { flex-direction: row; flex-wrap: wrap; gap: 1.1rem; }
+  .side-nav a::before { display: none; }
+  .now { display: none; }
+  .intro { font-size: 1.15rem; }
+  .entry-row { flex-direction: column; gap: 0.1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ================= latest-scrap panel (home) ================= */
+.notebook-title {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  margin-bottom: 0.55rem;
+}
+.notebook-title:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.notebook-excerpt { font-size: 1rem; line-height: 1.7; }
+.notebook-excerpt p + p { margin-top: 0.8rem; }
+.panel-note a { color: var(--accent); }
+.entry-desc p + p { margin-top: 0.25rem; }
+
+/* ================= individual scrap ================= */
+.scrap-head {
+  border-top: 3px double var(--accent);
+  padding-top: 1.4rem;
+  margin-bottom: 2.2rem;
+  transition: border-color 0.25s ease;
+}
+.scrap-kicker { font-size: 0.85rem; font-style: italic; color: var(--muted); margin-bottom: 1.1rem; }
+.scrap-kicker a { color: var(--accent); }
+.scrap-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+.scrap-meta { color: var(--muted); font-size: 0.82rem; margin-top: 0.7rem; }
+.scrap-meta .tag { color: var(--accent2); margin-left: 0.5rem; }
+.scrap-meta .scrap-source {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  margin-left: 0.5rem;
+}
+.scrap-meta .scrap-source::before { content: "·"; color: var(--muted); margin-right: 0.5rem; }
+
+.scrap-body { font-size: 1rem; line-height: 1.7; max-width: 38rem; }
+.scrap-body > * + * { margin-top: 1rem; }
+.scrap-body h2 { margin-top: 2.4rem; margin-bottom: 0.9rem; }
+.scrap-body h3 { font-size: 1.02rem; font-weight: 700; margin-top: 1.8rem; }
+.scrap-body ul, .scrap-body ol { padding-left: 1.4rem; }
+.scrap-body li + li { margin-top: 0.3rem; }
+.scrap-body blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.scrap-body code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  background: var(--surface);
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+}
+.scrap-body pre { background: var(--surface); padding: 0.9rem 1rem; overflow-x: auto; border-radius: 4px; }
+.scrap-body pre code { background: none; padding: 0; }
+.scrap-body hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
+.scrap-body a { color: var(--accent); }
+.scrap-body a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.scrap-body .thm, .scrap-body .proof { margin-top: 1rem; }
+.scrap-body .proof::after { content: ""; display: table; clear: both; }
+.scrap-body .katex-display { margin: 1.1rem 0; overflow-x: auto; overflow-y: hidden; }
+
+.scrap-foot {
+  border-top: 1px solid var(--line);
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  font-size: 0.9rem;
+}
+.scrap-foot a { color: var(--accent); }
