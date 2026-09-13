@@ -1,0 +1,34 @@
+# Site
+title: "Seunghwan Ryu — a mathematical scrapbook"
+description: "Study notes, mostly mathematics, written up after each session."
+url: "https://withwhom.github.io"
+baseurl: ""
+lang: en
+timezone: Asia/Seoul
+author:
+  name: Seunghwan Ryu
+
+# Scraps are ordinary posts (_posts/YYYY-MM-DD-slug.md).
+permalink: /scraps/:title/
+future: true          # never hide a scrap because of a timezone edge
+
+# Markdown. Math is rendered client-side by KaTeX, so kramdown must not
+# touch $$…$$ itself: with no math engine it wraps the raw TeX in
+# <span class="kdmath"> / <div class="kdmath">, which the layout renders.
+markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: ~
+  hard_wrap: false
+
+# GitHub Pages whitelist only.
+plugins:
+  - jekyll-feed
+feed:
+  path: feed.xml
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
