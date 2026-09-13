@@ -1,0 +1,18 @@
+---
+layout: default
+---
+  <article class="scrap">
+    <header class="scrap-head">
+      <p class="scrap-kicker"><a href="{{ '/' | relative_url }}">← Back to the scrapbook</a></p>
+      <h1 class="scrap-title">{{ page.title }}</h1>
+      <p class="scrap-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>{% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}{% if page.source %}<span class="scrap-source">{{ page.source }}</span>{% endif %}
+      </p>
+    </header>
+
+    <div class="scrap-body">
+{{ content }}
+    </div>
+
+    <p class="scrap-foot"><a href="{{ '/' | relative_url }}#scraps">← All scraps</a></p>
+  </article>
