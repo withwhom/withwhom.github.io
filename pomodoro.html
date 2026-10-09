@@ -1,0 +1,92 @@
+---
+layout: default
+title: Timer
+permalink: /pomodoro/
+---
+<div class="pomo" id="pomo" data-mode="focus">
+
+  <section class="pomo-card" aria-label="Pomodoro timer">
+    <div class="pomo-progress" aria-hidden="true"><span id="pomo-bar"></span></div>
+
+    <div class="pomo-modes" role="tablist" aria-label="Timer mode">
+      <button role="tab" data-mode="focus" aria-selected="true">Focus</button>
+      <button role="tab" data-mode="short" aria-selected="false">Short break</button>
+      <button role="tab" data-mode="long" aria-selected="false">Long break</button>
+    </div>
+
+    <p class="pomo-time" id="pomo-time" aria-live="off">25:00</p>
+
+    <div class="pomo-controls">
+      <button class="pomo-start" id="pomo-start">Start</button>
+      <button class="pomo-skip" id="pomo-skip" aria-label="Skip to next" title="Skip to next" hidden>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 5l9 7-9 7z" fill="currentColor"/><rect x="16" y="5" width="2.6" height="14" rx="1" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <p class="pomo-status"><span class="pomo-round" id="pomo-round">#1</span> <span id="pomo-msg">Time to focus.</span></p>
+
+  <section class="pomo-record" id="record">
+    <h2>Record</h2>
+
+    <div class="pomo-totals">
+      <div><span class="pomo-total-label">Today</span><span class="pomo-total" id="tot-today">0m</span></div>
+      <div><span class="pomo-total-label">This week</span><span class="pomo-total" id="tot-week">0m</span></div>
+      <div><span class="pomo-total-label">Last 30 days</span><span class="pomo-total" id="tot-month">0m</span></div>
+      <div><span class="pomo-total-label">Streak</span><span class="pomo-total" id="tot-streak">0 days</span></div>
+    </div>
+
+    <div class="pomo-sub">
+      <p class="pomo-sub-title">Last 14 days</p>
+      <div class="pomo-bars" id="pomo-bars"></div>
+    </div>
+
+    <div class="pomo-sub">
+      <p class="pomo-sub-title">Past half-year</p>
+      <div class="pomo-heat-wrap" id="pomo-heat-wrap">
+        <div class="pomo-heat" id="pomo-heat"></div>
+      </div>
+      <div class="pomo-legend" aria-hidden="true">less <i data-l="0"></i><i data-l="1"></i><i data-l="2"></i><i data-l="3"></i><i data-l="4"></i> more</div>
+    </div>
+
+    <div class="pomo-sub">
+      <p class="pomo-sub-title">By day</p>
+      <div id="pomo-log"></div>
+      <button class="pomo-link" id="pomo-log-more" hidden>Show all days</button>
+    </div>
+  </section>
+
+  <details class="pomo-settings">
+    <summary>Settings</summary>
+    <form id="pomo-form" autocomplete="off">
+      <fieldset>
+        <legend>Length (minutes)</legend>
+        <label>Focus <input type="number" name="focus" min="1" max="180" step="1"></label>
+        <label>Short break <input type="number" name="short" min="1" max="60" step="1"></label>
+        <label>Long break <input type="number" name="long" min="1" max="90" step="1"></label>
+      </fieldset>
+      <fieldset>
+        <legend>Flow</legend>
+        <label>Long break every <input type="number" name="every" min="2" max="12" step="1"> focus sessions</label>
+        <label class="pomo-check"><input type="checkbox" name="autoBreak"> Start breaks automatically</label>
+        <label class="pomo-check"><input type="checkbox" name="autoFocus"> Start focus automatically after a break</label>
+      </fieldset>
+      <fieldset>
+        <legend>Alerts</legend>
+        <label class="pomo-check"><input type="checkbox" name="sound"> Chime when a session ends</label>
+        <label class="pomo-check"><input type="checkbox" name="notify"> Desktop notification</label>
+      </fieldset>
+    </form>
+    <div class="pomo-data">
+      <p>Records live in this browser only. Export now and then to keep a backup, or to move them to another device.</p>
+      <button class="pomo-link" id="pomo-export">Export (.json)</button>
+      · <label class="pomo-link pomo-import">Import<input type="file" id="pomo-import" accept="application/json,.json" hidden></label>
+      · <button class="pomo-link pomo-danger" id="pomo-wipe">Clear all records</button>
+      <p class="pomo-data-note" id="pomo-data-note" role="status" hidden></p>
+    </div>
+  </details>
+
+  <p class="pomo-hint">Space starts and pauses. Time counts from the moment you press start, so a session cut short still goes into the record.</p>
+</div>
+
+<script src="{{ '/assets/js/pomodoro.js' | relative_url }}" defer></script>
