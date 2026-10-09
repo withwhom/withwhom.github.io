@@ -309,9 +309,10 @@ body:has(.pomo.is-running[data-mode="long"]) { --mode: var(--accent3); }
   overflow: hidden;
   text-align: center;
   padding: 2.1rem 1.5rem 2.3rem;
-  border: 1px solid color-mix(in srgb, var(--mode) 22%, var(--line));
+  --card-edge: color-mix(in srgb, var(--mode) 22%, var(--line));
+  border: 1px solid var(--card-edge);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--mode) 7%, var(--bg));
+  background: var(--card-edge); /* fill matches the border, in both themes */
   transition: background-color 0.5s ease, border-color 0.5s ease;
 }
 .pomo-progress { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: color-mix(in srgb, var(--mode) 12%, transparent); }
@@ -363,7 +364,7 @@ body:has(.pomo.is-running[data-mode="long"]) { --mode: var(--accent3); }
   background: var(--bg);
   color: var(--mode);
   cursor: pointer;
-  box-shadow: 0 5px 0 color-mix(in srgb, var(--mode) 28%, var(--line));
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--mode) 50%, var(--line));
   transition: transform 0.08s ease, box-shadow 0.08s ease, color 0.5s ease;
 }
 .pomo.is-running .pomo-start { transform: translateY(5px); box-shadow: 0 0 0 transparent; }
