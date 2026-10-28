@@ -5,14 +5,10 @@ date: 2026-08-22
 tags: [linear algebra]
 ---
 
-A textbook proof that origin-fixing isometries are linear turns out to assume what it proves. Two ways to fix it.
+A textbook proof that origin-fixing isometries are linear turns out to assume what it proves. I found two ways to fix it.
 
-## The claim
-
-Let $$f : \mathbb{R}^n \to \mathbb{R}^n$$ be an isometry, $$\lVert f(x) - f(y) \rVert = \lVert x - y \rVert$$
-for all $$x, y$$, with $$f(0) = 0$$. Then $$f$$ is linear.
-
-## The proof as written
+The claim: let $$f : \mathbb{R}^n \to \mathbb{R}^n$$ be an isometry, $$\lVert f(x) - f(y) \rVert = \lVert x - y \rVert$$
+for all $$x, y$$, with $$f(0) = 0$$. Then $$f$$ is linear. The proof as written goes:
 
 1. Since $$f(0) = 0$$, we get $$\lVert f(x) \rVert = \lVert x \rVert$$.
 2. By polarization, $$\langle f(x), f(y) \rangle = \langle x, y \rangle$$.
@@ -24,15 +20,11 @@ The gap is in step 3. Writing $$f(x)$$ as a combination of the $$f(e_i)$$ needs 
 to *span*, and the text justifies that by saying the image of a basis under $$f$$ is a
 basis. That is true for linear maps, which is the thing being proved.
 
-## Fix one: count
-
-In $$\mathbb{R}^n$$ any $$n$$ orthonormal vectors are linearly independent, hence a
+The first fix is to count. In $$\mathbb{R}^n$$ any $$n$$ orthonormal vectors are linearly independent, hence a
 basis. So spanning comes for free from dimension, no linearity needed. This is why
 the proof "works" in finite dimensions even though the stated justification is circular.
 
-## Fix two: expand the norm
-
-Avoid bases altogether. Using step 2,
+The second fix avoids bases altogether. Using step 2,
 
 $$
 \lVert f(x+y) - f(x) - f(y) \rVert^2
@@ -41,4 +33,4 @@ $$
 $$
 
 and the same computation gives $$\lVert f(cx) - c f(x) \rVert^2 = 0$$. This version
-also survives in infinite-dimensional inner product spaces, where fix one does not.
+also survives in infinite-dimensional inner product spaces, where the first fix does not.
