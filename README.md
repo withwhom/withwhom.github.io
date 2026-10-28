@@ -63,6 +63,17 @@ redirect when an address changes.
 
 ## Local preview
 
+Use **Ruby 3.3** (what GitHub Pages runs). Jekyll 3.x, which the
+`github-pages` gem pins, fails to start on Ruby 3.4+ (`csv` and other gems
+are no longer bundled). On macOS:
+
+```bash
+brew install ruby@3.3
+echo 'export PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH"' >> ~/.zshrc   # Intel Mac: /usr/local/opt/ruby@3.3/bin
+```
+
+Open a new terminal, check `ruby -v` shows 3.3, then from the repository folder:
+
 ```bash
 bundle config set --local path vendor/bundle
 bundle install
@@ -70,4 +81,5 @@ LANG=C.UTF-8 bundle exec jekyll serve
 ```
 
 Then open <http://localhost:4000>. The `Gemfile` pins the `github-pages` gem so
-the local build matches what GitHub builds.
+the local build matches what GitHub builds. If you ever installed gems with
+a different Ruby, run `rm -rf vendor Gemfile.lock` first.

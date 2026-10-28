@@ -79,6 +79,11 @@ kramdown의 `math_engine: mathjax`가 Markdown 안의 `$$…$$`를 `\(…\)`(문
 
 ## 로컬 빌드와 확인
 
+Ruby **3.3**을 쓴다(GitHub Pages와 같은 버전). Ruby 3.4 이상(Homebrew 기본 `ruby`는 4.x)에서는
+github-pages가 고정한 Jekyll 3.x가 `csv` 등을 찾지 못해 실행되지 않는다. macOS에서는
+`brew install ruby@3.3` 후 `/opt/homebrew/opt/ruby@3.3/bin`(Intel은 `/usr/local/opt/ruby@3.3/bin`)을
+PATH 앞에 둔다. 다른 Ruby로 설치한 적이 있으면 `rm -rf vendor Gemfile.lock` 후 다시 설치한다.
+
 ```bash
 bundle config set --local path vendor/bundle
 bundle install
