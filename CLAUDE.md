@@ -23,7 +23,7 @@ _layouts/
 _posts/                  스크랩. YYYY-MM-DD-slug.md
 index.html               Scraps 탭 (메인, /)
 questions.html           Open questions 탭 (/questions/)
-pomodoro.html            타이머 (/pomodoro/). 메뉴에는 없지만 계속 쓰는 페이지이므로 삭제하지 말 것
+pomodoro.html            Timer 탭 (/pomodoro/). 계속 쓰는 페이지이므로 삭제하지 말 것
 redirects/               옛 주소용 리다이렉트 페이지
 assets/css/main.css      전체 스타일 (색상 변수는 :root와 [data-theme="dark"])
 assets/js/pomodoro.js    타이머 스크립트
@@ -41,7 +41,8 @@ assets/js/pomodoro.js    타이머 스크립트
   방문자 선택을 저장). 세리프 서체(Charter 계열), 포인트 색은 버건디 `--accent`, 보조 색은 앤티크 골드
   `--accent2`(타이머의 긴 휴식에만 슬레이트 블루 `--accent3`). 시스템 다크모드를 자동으로
   따라가게 바꾸지 않는다.
-- **탭**: 현재 Scraps(`/`)와 Open questions(`/questions/`) 두 개.
+- **탭**: Scraps(`/`), Open questions(`/questions/`), Timer(`/pomodoro/`). 콘텐츠 탭은 앞의 두 개이고,
+  Timer는 도구 페이지라 `page` 레이아웃 대신 `default`를 직접 쓴다.
 - **연락처**: GitHub 링크만 둔다. 이메일 주소는 어디에도 넣지 않는다(설정, 피드, 페이지 모두).
 - **플러그인**: GitHub Pages 기본 지원 플러그인만 쓴다. 지금은 `jekyll-feed` 하나뿐이다.
   새 플러그인이 필요하면 먼저 사용자에게 묻는다.
@@ -68,7 +69,6 @@ assets/js/pomodoro.js    타이머 스크립트
    ---
    ```
 2. `_data/navigation.yml`에 같은 `url`로 항목을 추가한다. 현재 페이지 탭에는 `aria-current="page"`가 붙는다.
-   타이머를 메뉴에 다시 넣을 때도 `- title: Timer` / `url: /pomodoro/`를 추가하면 된다.
 
 ## 수식 (KaTeX)
 

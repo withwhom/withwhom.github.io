@@ -1,7 +1,8 @@
 # Sidebar tabs, in order. To add a tab: create the page (with a `permalink`
 # and `layout: page`) and add an entry here with the same url.
-# The timer (/pomodoro/) is live but deliberately left off the menu.
 - title: Scraps
   url: /
 - title: Open questions
   url: /questions/
+- title: Timer
+  url: /pomodoro/
