@@ -1,0 +1,18 @@
+<aside>
+  <div class="name"><a href="{{ '/' | relative_url }}">Seunghwan Ryu</a><div class="name-ko">류승환</div></div>
+  <p class="affiliation">Mathematics Education,<br>Seoul National University</p>
+  <p class="tagline">a mathematical scrapbook</p>
+  <nav class="side-nav">
+{%- for item in site.data.navigation %}
+    <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+{%- endfor %}
+  </nav>
+  <div class="now">
+    <p class="now-title">Now</p>
+    <p>Reading: Fraleigh, ch. 10</p>
+    <p>Listening: Laufey</p>
+  </div>
+  <p class="side-contact">
+    <a href="https://github.com/withwhom">GitHub</a>
+  </p>
+</aside>
