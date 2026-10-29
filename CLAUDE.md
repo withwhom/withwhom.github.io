@@ -100,7 +100,8 @@ LANG=C.UTF-8 bundle exec jekyll build    # 또는 jekyll serve
 
 ## Conjugle (프랑스어 동사 활용 게임)
 
-`/conjugle/`. 하루 다섯 문장의 빈칸에 동사를 알맞게 활용해 넣는 Wordle 스타일 게임이다.
+`/conjugle/`. 하루 다섯 문장의 빈칸에 동사를 알맞게 활용해 넣는 게임이다. 문장마다 네 번까지 답할 수 있고,
+틀릴 때마다 빈칸 아래에 힌트가 하나씩 열린다(시제 → 발음 `ipa` → 정답 모양: 단어마다 첫 글자와 글자 수).
 
 - `conjugle/index.html`: 게임 페이지. front matter가 없어 Jekyll이 그대로 복사한다(Liquid 처리 없음).
   사이트와 같은 색 토큰을 쓰고, 테마는 사이트와 같은 `localStorage`의 `theme` 키로 맞춘다

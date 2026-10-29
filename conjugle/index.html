@@ -103,7 +103,6 @@
     padding: 0.1rem 0.7rem;
   }
   .chip b { font-weight: 600; color: var(--accent); }
-  .chip.hidden-tense b { color: var(--muted); font-weight: 400; }
   .sentence { font-size: 1.35rem; line-height: 1.65; margin: 1.1rem 0 1.2rem; }
   .blank {
     display: inline-block;
@@ -116,21 +115,27 @@
   }
   .blank.failed { border-bottom-color: var(--muted); color: var(--muted); }
 
-  .guesses { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
-  .guess-row { display: flex; flex-wrap: wrap; gap: 3px; }
-  .tile {
-    min-width: 1.65rem; height: 2rem;
-    padding: 0 0.15rem;
-    display: inline-flex; align-items: center; justify-content: center;
-    border-radius: 4px;
-    font-size: 1.05rem;
-    border: 2px solid transparent;
+  .hints { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.1rem; }
+  .hint {
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    padding: 0.55rem 0.75rem 0.6rem;
   }
-  .tile.gap { min-width: 0.55rem; padding: 0; }
-  .tile.correct { background: var(--accent); color: var(--on-accent); }
-  .tile.accent { border-color: var(--accent); color: var(--accent); background: var(--bg); }
-  .tile.present { background: var(--accent2); color: var(--on-accent); }
-  .tile.absent { background: var(--absent); color: var(--ink); }
+  .hint .label { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .hint .value { font-size: 1.2rem; color: var(--accent); margin-top: 0.1rem; }
+  .hint .value.shape { letter-spacing: 0.18em; }
+  .hint .after { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+  .hint .after s { text-decoration-color: var(--muted); }
+  .hint.locked { border-style: dashed; background: transparent; }
+  .hint.locked .value { color: var(--line); }
+  .hint.new { animation: hint-in 0.45s ease; }
+  @keyframes hint-in {
+    from { opacity: 0; transform: translateY(-4px); border-color: var(--accent); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hint.new { animation: none; } }
 
   .form { display: flex; gap: 0.5rem; }
   .form input {
@@ -201,7 +206,6 @@
   dialog h2 { font-size: 1.3rem; font-weight: 400; margin-bottom: 0.6rem; }
   dialog p, dialog li { font-size: 0.95rem; line-height: 1.75; }
   dialog ul { padding-left: 1.1rem; margin: 0.4rem 0 0.8rem; }
-  dialog .legend { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 0.6rem; align-items: center; margin: 0.6rem 0 1rem; font-size: 0.9rem; }
   dialog .close-row { text-align: right; }
 
   footer { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 2.5rem; }
@@ -210,7 +214,6 @@
     html { font-size: 16px; }
     h1 { font-size: 2.1rem; }
     .sentence { font-size: 1.2rem; }
-    .tile { min-width: 1.45rem; height: 1.8rem; font-size: 0.95rem; }
   }
 </style>
 </head>
@@ -243,17 +246,11 @@
   <p>매일 다섯 문장이 나와요. 빈칸에 주어진 동사를 알맞은 시제와 인칭으로 활용해 넣으세요. 시제는 처음에 숨겨져 있으니 문장 속 단서로 찾아야 해요.</p>
   <ul>
     <li>문장마다 네 번까지 시도할 수 있어요.</li>
-    <li>한 번 틀리면 시제가, 두 번 틀리면 정답의 발음(IPA)이 힌트로 나와요.</li>
+    <li>틀릴 때마다 힌트가 하나씩 열려요. 첫 번째는 시제, 두 번째는 정답의 발음(IPA), 세 번째는 정답의 모양(단어마다 첫 글자와 글자 수)이에요.</li>
     <li>복합시제는 조동사와 과거분사를 함께(<i>est allée</i>), 대명동사는 재귀대명사까지(<i>s'est levée</i>), 명령형은 붙임표까지(<i>lève-toi</i>) 써요.</li>
     <li>대소문자는 구분하지 않지만 악센트는 구분해요.</li>
     <li>문제는 서울 시간 자정에 바뀌어요.</li>
   </ul>
-  <div class="legend">
-    <span class="tile correct">é</span><span>맞는 글자, 맞는 자리</span>
-    <span class="tile accent">e</span><span>자리는 맞는데 악센트가 달라요</span>
-    <span class="tile present">s</span><span>정답에 있지만 다른 자리</span>
-    <span class="tile absent">x</span><span>정답에 없는 글자</span>
-  </div>
   <div class="close-row"><button class="btn ghost" id="help-close">Fermer</button></div>
 </dialog>
 
@@ -343,41 +340,24 @@
       .replace(/\s+/g, " ")
       .trim();
   }
-  function base(ch) { return ch.normalize("NFD").charAt(0); }
   function isRight(item, guess) {
     var g = norm(guess);
     return item.a.some(function (ans) { return norm(ans) === g; });
   }
 
-  // Wordle-style marks against one answer; "accent" = right letter in the
-  // right place but with the wrong (or a missing) accent.
-  function grade(guess, target) {
-    var g = Array.from(guess), t = Array.from(target);
-    var marks = g.map(function () { return "absent"; });
-    var left = {};
-    t.forEach(function (ch, i) { if (g[i] !== ch) left[ch] = (left[ch] || 0) + 1; });
-    g.forEach(function (ch, i) { if (ch === t[i]) marks[i] = "correct"; });
-    g.forEach(function (ch, i) {
-      if (marks[i] === "correct") return;
-      if (ch === " ") { marks[i] = "gap"; return; }
-      if (t[i] !== undefined && t[i] !== " " && base(ch) === base(t[i])) {
-        marks[i] = "accent";
-        if (left[t[i]] > 0) left[t[i]]--;
-      } else if (left[ch] > 0) {
-        marks[i] = "present";
-        left[ch]--;
-      }
-    });
-    return marks;
-  }
-  function bestTarget(item, guess) {
-    var g = Array.from(guess), best = norm(item.a[0]), bestScore = -1;
-    item.a.forEach(function (ans) {
-      var t = Array.from(norm(ans)), score = 0;
-      g.forEach(function (ch, i) { if (ch === t[i]) score++; });
-      if (score > bestScore) { best = norm(ans); bestScore = score; }
-    });
-    return best;
+  // Hints open one per wrong answer, in this order.
+  var HINTS = [
+    { label: "temps", value: function (item) { return D.TENSES[item.t]; } },
+    { label: "prononciation", cls: "ipa", value: function (item) { return "/" + item.ipa + "/"; } },
+    { label: "forme", cls: "shape", value: function (item) { return shape(item.a[0]); } }
+  ];
+  // First letter of each word, "_" for the other letters; ' and - stay.
+  function shape(answer) {
+    return answer.split(" ").map(function (word) {
+      return Array.from(word).map(function (ch, k) {
+        return k === 0 || ch === "'" || ch === "-" ? ch : "_";
+      }).join("");
+    }).join("  ");
   }
 
   function state(i) {
@@ -447,6 +427,7 @@
 
   // ---------- one sentence ----------
   var viewing = -1; // a finished sentence still on screen until "Suivant"
+  var justMissed = false; // animate only the hint the last answer opened
 
   function renderSentence(i) {
     var item = items[i];
@@ -463,16 +444,11 @@
     verb.appendChild(document.createTextNode("verbe "));
     verb.appendChild(el("b", "", item.v));
     chips.appendChild(verb);
-    var showTense = st !== "open" || misses >= 1;
-    var tense = el("span", "chip" + (showTense ? "" : " hidden-tense"));
-    tense.appendChild(document.createTextNode("temps "));
-    tense.appendChild(el("b", "", showTense ? D.TENSES[item.t] : "?"));
-    chips.appendChild(tense);
-    if (st === "open" && misses >= 2) {
-      var ipa = el("span", "chip");
-      ipa.appendChild(document.createTextNode("prononciation "));
-      ipa.appendChild(el("b", "ipa", "/" + item.ipa + "/"));
-      chips.appendChild(ipa);
+    if (st !== "open") {
+      var tense = el("span", "chip");
+      tense.appendChild(document.createTextNode("temps "));
+      tense.appendChild(el("b", "", D.TENSES[item.t]));
+      chips.appendChild(tense);
     }
     card.appendChild(chips);
 
@@ -485,20 +461,24 @@
     sentence.appendChild(document.createTextNode(parts[1]));
     card.appendChild(sentence);
 
-    if (gs.length) {
-      var list = el("div", "guesses");
-      list.setAttribute("aria-label", "Essais");
-      gs.forEach(function (g) {
-        var guess = norm(g);
-        var marks = grade(guess, bestTarget(item, guess));
-        var row = el("div", "guess-row");
-        row.setAttribute("aria-label", guess);
-        Array.from(guess).forEach(function (ch, k) {
-          row.appendChild(el("span", "tile " + marks[k], ch === " " ? "" : ch));
-        });
-        list.appendChild(row);
+    if (st === "open") {
+      var wrong = gs.filter(function (g) { return !isRight(item, g); });
+      var hints = el("div", "hints");
+      hints.setAttribute("aria-label", "Indices");
+      HINTS.forEach(function (h, k) {
+        var open = k < wrong.length;
+        var box = el("div", "hint" + (open ? "" : " locked") + (open && k === wrong.length - 1 && justMissed ? " new" : ""));
+        box.appendChild(el("p", "label", "Indice " + (k + 1) + " · " + h.label));
+        box.appendChild(el("p", "value" + (open && h.cls ? " " + h.cls : ""), open ? h.value(item) : "—"));
+        if (open) {
+          var after = el("p", "after");
+          after.appendChild(document.createTextNode("après "));
+          after.appendChild(el("s", "", wrong[k]));
+          box.appendChild(after);
+        }
+        hints.appendChild(box);
       });
-      card.appendChild(list);
+      card.appendChild(hints);
     }
 
     if (st === "open") {
@@ -521,9 +501,8 @@
       var status = el("p", "status");
       status.setAttribute("aria-live", "polite");
       var left = MAX_TRIES - gs.length;
-      if (misses === 1) status.textContent = "Indice : le temps est révélé.";
-      if (misses === 2) status.textContent = "Indice : écoutez la prononciation.";
-      if (misses === 3) status.textContent = "Dernier essai !";
+      if (misses > 0 && misses < MAX_TRIES - 1) status.textContent = "Pas tout à fait — un nouvel indice est ouvert.";
+      if (misses === MAX_TRIES - 1) status.textContent = "Dernier essai !";
       card.appendChild(status);
       card.appendChild(el("p", "tries", left + (left > 1 ? " essais restants" : " essai restant")));
 
@@ -536,6 +515,7 @@
           return;
         }
         gs.push(guess);
+        justMissed = !isRight(item, guess);
         if (state(i) !== "open") viewing = i;
         store.games[date] = game;
         save();
@@ -554,7 +534,7 @@
       note.lang = "ko";
       reveal.appendChild(note);
       var next = el("button", "btn next", i + 1 < items.length ? "Phrase suivante →" : "Voir le résultat →");
-      next.addEventListener("click", function () { viewing = -1; render(); });
+      next.addEventListener("click", function () { viewing = -1; justMissed = false; render(); });
       reveal.appendChild(next);
       card.appendChild(reveal);
       setTimeout(function () { next.focus({ preventScroll: true }); }, 0);
