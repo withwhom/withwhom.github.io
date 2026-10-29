@@ -126,8 +126,15 @@
   .hint .label { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
   .hint .value { font-size: 1.2rem; color: var(--accent); margin-top: 0.1rem; }
   .hint .value.shape { letter-spacing: 0.18em; }
-  .hint .after { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
-  .hint .after s { text-decoration-color: var(--muted); }
+  .misses { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: -0.3rem 0 1rem; font-size: 0.85rem; }
+  .misses .label { color: var(--muted); margin-right: 0.15rem; }
+  .misses .miss {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    color: var(--muted);
+    text-decoration: line-through;
+  }
   .hint.locked { border-style: dashed; background: transparent; }
   .hint.locked .value { color: var(--line); }
   .hint.new { animation: hint-in 0.45s ease; }
@@ -470,15 +477,17 @@
         var box = el("div", "hint" + (open ? "" : " locked") + (open && k === wrong.length - 1 && justMissed ? " new" : ""));
         box.appendChild(el("p", "label", "Indice " + (k + 1) + " · " + h.label));
         box.appendChild(el("p", "value" + (open && h.cls ? " " + h.cls : ""), open ? h.value(item) : "—"));
-        if (open) {
-          var after = el("p", "after");
-          after.appendChild(document.createTextNode("après "));
-          after.appendChild(el("s", "", wrong[k]));
-          box.appendChild(after);
-        }
         hints.appendChild(box);
       });
       card.appendChild(hints);
+    }
+
+    var missed = gs.filter(function (g) { return !isRight(item, g); });
+    if (missed.length) {
+      var list = el("div", "misses");
+      list.appendChild(el("span", "label", "Essais incorrects :"));
+      missed.forEach(function (g) { list.appendChild(el("span", "miss", g)); });
+      card.appendChild(list);
     }
 
     if (st === "open") {
