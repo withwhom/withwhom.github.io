@@ -154,16 +154,6 @@
   .btn:hover { filter: brightness(1.08); }
   .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
   .btn.ghost:hover { border-color: var(--accent); color: var(--accent); filter: none; }
-  .keys { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.6rem; }
-  .key {
-    min-width: 2.1rem; height: 2.1rem;
-    border: 1px solid var(--line);
-    background: var(--bg);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  .key:hover { border-color: var(--accent); color: var(--accent); }
   .status { min-height: 1.4rem; margin-top: 0.6rem; font-size: 0.9rem; color: var(--muted); }
   .tries { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
 
@@ -310,7 +300,6 @@
   var DATA = window.CONJUGLE;
   var MAX_TRIES = 4;
   var STORE_KEY = "conjugle";
-  var ACCENTS = ["à", "â", "ç", "é", "è", "ê", "ë", "î", "ï", "ô", "ù", "û", "œ"];
   var MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
   var byId = {};
@@ -528,23 +517,6 @@
       form.appendChild(input);
       form.appendChild(submit);
       card.appendChild(form);
-
-      var keys = el("div", "keys");
-      ACCENTS.forEach(function (ch) {
-        var k = el("button", "key", ch);
-        k.type = "button";
-        k.setAttribute("aria-label", "Insérer " + ch);
-        k.addEventListener("mousedown", function (e) { e.preventDefault(); });
-        k.addEventListener("click", function () {
-          var s = input.selectionStart == null ? input.value.length : input.selectionStart;
-          var e2 = input.selectionEnd == null ? s : input.selectionEnd;
-          input.value = input.value.slice(0, s) + ch + input.value.slice(e2);
-          input.focus();
-          input.setSelectionRange(s + ch.length, s + ch.length);
-        });
-        keys.appendChild(k);
-      });
-      card.appendChild(keys);
 
       var status = el("p", "status");
       status.setAttribute("aria-live", "polite");
