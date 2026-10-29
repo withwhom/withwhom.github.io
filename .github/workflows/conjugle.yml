@@ -1,0 +1,37 @@
+name: Conjugle data
+
+on:
+  pull_request:
+    paths:
+      - "conjugle/**"
+      - "scripts/check-conjugle.js"
+      - ".github/workflows/conjugle.yml"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check sentence bank (and that past puzzles did not change)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          base_dir="$RUNNER_TEMP/conjugle-base"
+          if [ -n "$BASE_REF" ] && git cat-file -e "origin/$BASE_REF:conjugle/data.js" 2>/dev/null; then
+            mkdir -p "$base_dir"
+            git show "origin/$BASE_REF:conjugle/data.js" > "$base_dir/data.js"
+            if git cat-file -e "origin/$BASE_REF:conjugle/daily.js" 2>/dev/null; then
+              git show "origin/$BASE_REF:conjugle/daily.js" > "$base_dir/daily.js"
+            fi
+            node scripts/check-conjugle.js --base "$base_dir"
+          else
+            node scripts/check-conjugle.js
+          fi

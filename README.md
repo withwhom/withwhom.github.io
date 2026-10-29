@@ -54,6 +54,13 @@ Notes:
 Shown at `/questions/`. Edit `_data/open_questions.yml`. Each item has a `question` and an optional
 `context`; both accept Markdown and `$$…$$` math.
 
+## Conjugle
+
+A daily French conjugation game at `/conjugle/`: a standalone page in
+`conjugle/` (no site layout). Sentences live in `conjugle/data.js`; after
+editing them run `node scripts/check-conjugle.js` (CI runs it on every pull
+request). The data format and the rules for new sentences are in `CLAUDE.md`.
+
 ## Site structure
 
 Shared pieces live in `_includes/` (head, sidebar, theme toggle, footer,
