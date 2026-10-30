@@ -76,6 +76,17 @@
   h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 0.01em; line-height: 1.1; }
   h1 span { color: var(--accent); }
   .tagline { color: var(--muted); font-style: italic; margin-top: 0.35rem; }
+  .modes {
+    display: inline-flex;
+    margin-top: 1rem;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .modes a { padding: 0.3rem 1.1rem; border-radius: 999px; font-size: 0.9rem; color: var(--muted); }
+  .modes a:hover { color: var(--accent); }
+  .modes a[aria-current="page"] { background: var(--accent); color: var(--on-accent); }
   .daynav { display: flex; justify-content: center; align-items: center; gap: 0.6rem; margin-top: 0.75rem; font-size: 0.9rem; color: var(--muted); }
   .daynav a, .daynav span.off { width: 1.6rem; text-align: center; }
   .daynav span.off { opacity: 0.3; }
@@ -238,6 +249,10 @@
   <header class="title">
     <h1>Conju<span>gle</span></h1>
     <p class="tagline">Un verbe, une phrase, le bon temps.</p>
+    <nav class="modes" aria-label="모드">
+      <a href="./" id="mode-daily">오늘의 문제</a>
+      <a href="?mode=entrainement" id="mode-practice">연습</a>
+    </nav>
     <nav class="daynav" id="daynav" aria-label="Jours précédents"></nav>
   </header>
 
@@ -257,7 +272,7 @@
     <li>복합시제는 조동사와 과거분사를 함께(<i>est allée</i>), 대명동사는 재귀대명사까지(<i>s'est levée</i>), 명령형은 붙임표까지(<i>lève-toi</i>) 써요.</li>
     <li>대소문자는 구분하지 않지만 악센트는 구분해요.</li>
     <li>문제는 서울 시간 자정에 바뀌어요.</li>
-    <li>오늘 문제를 다 풀면 <i>5 autres phrases</i>로 다섯 문장씩 더 풀 수 있어요. 이 연습 문제는 통계에 들어가지 않아요.</li>
+    <li>위쪽 <i>연습</i> 탭에서는 언제든 다섯 문장씩 더 풀 수 있어요. 연습 문제는 통계에 들어가지 않아요.</li>
   </ul>
   <div class="close-row"><button class="btn ghost" id="help-close">Fermer</button></div>
 </dialog>
@@ -458,9 +473,6 @@
     nav.textContent = "";
     if (practice) {
       nav.appendChild(el("span", "", "Entraînement · série " + game.count));
-      var back = el("a", "today-link", "Conjugle du jour");
-      back.href = "./";
-      nav.appendChild(back);
       return;
     }
     var n = D.dayNumber(date);
@@ -751,6 +763,8 @@
   }
 
   // ---------- main ----------
+  document.getElementById(practice ? "mode-practice" : "mode-daily").setAttribute("aria-current", "page");
+
   function render() {
     renderDayNav();
     var main = document.getElementById("game");

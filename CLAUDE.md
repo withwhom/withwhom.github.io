@@ -107,7 +107,8 @@ LANG=C.UTF-8 bundle exec jekyll build    # 또는 jekyll serve
   사이트와 같은 색 토큰을 쓰고, 테마는 사이트와 같은 `localStorage`의 `theme` 키로 맞춘다
   (밝은 테마 기본, `prefers-color-scheme`은 쓰지 않음). 페이지 안에 작은 토글이 있다.
   진행 상황과 통계는 `localStorage`의 `conjugle` 키에 저장한다.
-- 오늘 문제를 다 풀면 결과 화면의 "5 autres phrases"로 `/conjugle/?mode=entrainement`(연습)에 들어간다.
+- 제목 아래 "오늘의 문제 | 연습" 탭으로 모드를 나눈다. 연습은 `/conjugle/?mode=entrainement`이고, 오늘 문제
+  결과 화면의 "5 autres phrases" 버튼으로도 들어간다.
   연습은 언제나 다섯 문장씩이고, 이미 출제 대상(release)에 든 문장 중 오늘 문제와 최근에 연습한 문장을 빼고
   무작위로, 되도록 시제가 겹치지 않게 고른다. 연습 기록은 `conjugle` 키의 `practice`에 따로 두며 통계에는
   넣지 않는다.
