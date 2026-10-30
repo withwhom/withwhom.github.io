@@ -249,9 +249,9 @@
   <header class="title">
     <h1>Conju<span>gle</span></h1>
     <p class="tagline">Un verbe, une phrase, le bon temps.</p>
-    <nav class="modes" aria-label="모드">
-      <a href="./" id="mode-daily">오늘의 문제</a>
-      <a href="?mode=entrainement" id="mode-practice">연습</a>
+    <nav class="modes" aria-label="Mode de jeu">
+      <a href="./" id="mode-daily">Aujourd'hui</a>
+      <a href="?mode=entrainement" id="mode-practice">Entraînement</a>
     </nav>
     <nav class="daynav" id="daynav" aria-label="Jours précédents"></nav>
   </header>
@@ -265,14 +265,14 @@
 
 <dialog id="help" aria-labelledby="help-title">
   <h2 id="help-title">Comment jouer</h2>
-  <p>매일 다섯 문장이 나와요. 빈칸에 주어진 동사를 알맞은 시제와 인칭으로 활용해 넣으세요. 시제는 처음에 숨겨져 있으니 문장 속 단서로 찾아야 해요.</p>
+  <p>Chaque jour, cinq phrases. Complétez le blanc avec le verbe donné, conjugué au bon temps et à la bonne personne. Le temps est caché au départ : trouvez-le grâce aux indices de la phrase.</p>
   <ul>
-    <li>문장마다 네 번까지 시도할 수 있어요.</li>
-    <li>틀릴 때마다 힌트가 하나씩 열려요. 첫 번째는 시제, 두 번째는 정답의 발음(IPA), 세 번째는 정답의 모양(단어마다 첫 글자와 글자 수)이에요.</li>
-    <li>복합시제는 조동사와 과거분사를 함께(<i>est allée</i>), 대명동사는 재귀대명사까지(<i>s'est levée</i>), 명령형은 붙임표까지(<i>lève-toi</i>) 써요.</li>
-    <li>대소문자는 구분하지 않지만 악센트는 구분해요.</li>
-    <li>문제는 서울 시간 자정에 바뀌어요.</li>
-    <li>위쪽 <i>연습</i> 탭에서는 언제든 한 문장씩 계속 풀 수 있어요. 연습은 오늘의 문제 통계에 들어가지 않아요.</li>
+    <li>Vous avez quatre essais par phrase.</li>
+    <li>Chaque erreur débloque un indice, dans l'ordre : le temps, puis la prononciation de la réponse (API), puis sa forme (la première lettre et le nombre de lettres de chaque mot).</li>
+    <li>Aux temps composés, écrivez l'auxiliaire et le participe passé (<i>est allée</i>) ; pour un verbe pronominal, ajoutez le pronom réfléchi (<i>s'est levée</i>) ; à l'impératif, gardez le trait d'union (<i>lève-toi</i>).</li>
+    <li>Les majuscules ne comptent pas, mais les accents, si.</li>
+    <li>Le Conjugle du jour change à minuit, heure de Séoul.</li>
+    <li>L'onglet <i>Entraînement</i> propose des phrases à l'infini, une à la fois. Il ne compte pas dans les statistiques.</li>
   </ul>
   <div class="close-row"><button class="btn ghost" id="help-close">Fermer</button></div>
 </dialog>
@@ -706,7 +706,7 @@
     card.appendChild(grid);
 
     var row = el("div", "share-row");
-    var more = el("a", "btn ghost", "연습으로 계속 →");
+    var more = el("a", "btn ghost", "Continuer à s'entraîner →");
     more.href = "?mode=entrainement";
     var copy = el("button", "btn", "Copier le résultat");
     copy.addEventListener("click", function () {
