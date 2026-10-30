@@ -76,6 +76,17 @@
   h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 0.01em; line-height: 1.1; }
   h1 span { color: var(--accent); }
   .tagline { color: var(--muted); font-style: italic; margin-top: 0.35rem; }
+  .modes {
+    display: inline-flex;
+    margin-top: 1rem;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .modes a { padding: 0.3rem 1.1rem; border-radius: 999px; font-size: 0.9rem; color: var(--muted); }
+  .modes a:hover { color: var(--accent); }
+  .modes a[aria-current="page"] { background: var(--accent); color: var(--on-accent); }
   .daynav { display: flex; justify-content: center; align-items: center; gap: 0.6rem; margin-top: 0.75rem; font-size: 0.9rem; color: var(--muted); }
   .daynav a, .daynav span.off { width: 1.6rem; text-align: center; }
   .daynav span.off { opacity: 0.3; }
@@ -238,6 +249,10 @@
   <header class="title">
     <h1>Conju<span>gle</span></h1>
     <p class="tagline">Un verbe, une phrase, le bon temps.</p>
+    <nav class="modes" aria-label="모드">
+      <a href="./" id="mode-daily">오늘의 문제</a>
+      <a href="?mode=entrainement" id="mode-practice">연습</a>
+    </nav>
     <nav class="daynav" id="daynav" aria-label="Jours précédents"></nav>
   </header>
 
@@ -257,7 +272,7 @@
     <li>복합시제는 조동사와 과거분사를 함께(<i>est allée</i>), 대명동사는 재귀대명사까지(<i>s'est levée</i>), 명령형은 붙임표까지(<i>lève-toi</i>) 써요.</li>
     <li>대소문자는 구분하지 않지만 악센트는 구분해요.</li>
     <li>문제는 서울 시간 자정에 바뀌어요.</li>
-    <li>오늘 문제를 다 풀면 <i>5 autres phrases</i>로 다섯 문장씩 더 풀 수 있어요. 이 연습 문제는 통계에 들어가지 않아요.</li>
+    <li>위쪽 <i>연습</i> 탭에서는 언제든 한 문장씩 계속 풀 수 있어요. 연습은 오늘의 문제 통계에 들어가지 않아요.</li>
   </ul>
   <div class="close-row"><button class="btn ghost" id="help-close">Fermer</button></div>
 </dialog>
@@ -339,9 +354,9 @@
   var game;
   if (practice) {
     game = store.practice;
-    var usable = game && Array.isArray(game.ids) && Array.isArray(game.guesses) &&
-      game.ids.length === game.guesses.length && game.ids.every(function (id) { return byId[id]; });
-    if (!usable || setDone(game)) game = newPracticeSet();
+    var usable = game && Array.isArray(game.ids) && game.ids.length === 1 && byId[game.ids[0]] &&
+      Array.isArray(game.guesses) && game.guesses.length === 1;
+    if (!usable || setDone(game)) game = newPracticeItem();
     ids = game.ids;
     items = ids.map(function (id) { return byId[id]; });
   } else {
@@ -351,34 +366,31 @@
     }
   }
 
-  // Five released sentences that are not today's and were not practised
-  // recently, with different tenses where possible.
-  function newPracticeSet() {
+  // Practice is one sentence at a time: a released sentence that is not one
+  // of today's, was not practised recently, and (if possible) has a different
+  // tense from the previous one. The running tally lives with it.
+  var PRACTICE_MEMORY = 40;
+  function newPracticeItem() {
     var prev = store.practice || {};
     var release = D.releaseFor(today, DATA.releases);
     var todays = {};
     (D.puzzleIds(today, DATA) || []).forEach(function (id) { todays[id] = true; });
     var released = DATA.bank.filter(function (it) { return release && it.id <= release.maxId && !todays[it.id]; });
-    var seen = Array.isArray(prev.seen) ? prev.seen : [];
-    var pool = released.filter(function (it) { return seen.indexOf(it.id) === -1; });
-    if (pool.length < D.PER_DAY) { seen = []; pool = released.slice(); }
-    for (var i = pool.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
-    }
-    var picks = [], tenses = {};
-    pool.forEach(function (it) {
-      if (picks.length < D.PER_DAY && !tenses[it.t]) { picks.push(it); tenses[it.t] = true; }
-    });
-    pool.forEach(function (it) {
-      if (picks.length < D.PER_DAY && picks.indexOf(it) === -1) picks.push(it);
-    });
-    var pickIds = picks.map(function (it) { return it.id; });
+    var seen = Array.isArray(prev.seen) ? prev.seen.slice(-PRACTICE_MEMORY) : [];
+    var last = prev.ids && byId[prev.ids[prev.ids.length - 1]];
+    var fresh = released.filter(function (it) { return seen.indexOf(it.id) === -1; });
+    var pool = fresh.filter(function (it) { return !last || it.t !== last.t; });
+    if (!pool.length) pool = fresh;
+    if (!pool.length) { seen = []; pool = released; }
+    var pick = pool[Math.floor(Math.random() * pool.length)];
     store.practice = {
-      ids: pickIds,
-      guesses: pickIds.map(function () { return []; }),
-      seen: seen.concat(pickIds),
-      count: (prev.count || 0) + 1
+      ids: [pick.id],
+      guesses: [[]],
+      seen: seen.concat(pick.id),
+      total: prev.total || 0,
+      right: prev.right || 0,
+      streak: prev.streak || 0,
+      best: prev.best || 0
     };
     save();
     return store.practice;
@@ -457,10 +469,7 @@
     var nav = document.getElementById("daynav");
     nav.textContent = "";
     if (practice) {
-      nav.appendChild(el("span", "", "Entraînement · série " + game.count));
-      var back = el("a", "today-link", "Conjugle du jour");
-      back.href = "./";
-      nav.appendChild(back);
+      nav.appendChild(el("span", "", game.right + " / " + game.total + " réussies · série " + game.streak + " (record " + game.best + ")"));
       return;
     }
     var n = D.dayNumber(date);
@@ -485,6 +494,7 @@
   function renderDots(active) {
     var dots = document.getElementById("dots");
     dots.textContent = "";
+    dots.hidden = practice;
     items.forEach(function (_, i) {
       var st = state(i);
       var cls = "dot" + (st === "win" ? " win" : st === "loss" ? " loss" : "") + (i === active ? " current" : "");
@@ -504,7 +514,7 @@
 
     var card = el("section", "card");
     card.setAttribute("aria-label", "Phrase " + (i + 1));
-    card.appendChild(el("p", "count", "Phrase " + (i + 1) + " / " + items.length));
+    card.appendChild(el("p", "count", practice ? "Entraînement" : "Phrase " + (i + 1) + " / " + items.length));
 
     var chips = el("div", "chips");
     var verb = el("span", "chip");
@@ -585,7 +595,16 @@
         }
         gs.push(guess);
         justMissed = !isRight(item, guess);
-        if (state(i) !== "open") viewing = i;
+        if (state(i) !== "open") {
+          viewing = i;
+          if (practice) {
+            var won = state(i) === "win";
+            game.total++;
+            game.right += won ? 1 : 0;
+            game.streak = won ? game.streak + 1 : 0;
+            game.best = Math.max(game.best, game.streak);
+          }
+        }
         if (practice) store.practice = game;
         else store.games[date] = game;
         save();
@@ -603,8 +622,17 @@
       var note = el("p", "note", item.n);
       note.lang = "ko";
       reveal.appendChild(note);
-      var next = el("button", "btn next", i + 1 < items.length ? "Phrase suivante →" : "Voir le résultat →");
-      next.addEventListener("click", function () { viewing = -1; justMissed = false; render(); });
+      var next = el("button", "btn next", practice || i + 1 < items.length ? "Phrase suivante →" : "Voir le résultat →");
+      next.addEventListener("click", function () {
+        viewing = -1;
+        justMissed = false;
+        if (practice) {
+          game = newPracticeItem();
+          ids = game.ids;
+          items = ids.map(function (id) { return byId[id]; });
+        }
+        render();
+      });
       reveal.appendChild(next);
       card.appendChild(reveal);
       setTimeout(function () { next.focus({ preventScroll: true }); }, 0);
@@ -667,7 +695,7 @@
   function renderSummary() {
     var card = el("section", "card summary");
     card.setAttribute("aria-label", "Résultat");
-    card.appendChild(el("p", "count", practice ? "Entraînement · série " + game.count : "Résultat"));
+    card.appendChild(el("p", "count", "Résultat"));
     var sc = el("p", "score");
     sc.appendChild(el("span", "", String(score())));
     sc.appendChild(document.createTextNode(" / " + items.length));
@@ -678,20 +706,8 @@
     card.appendChild(grid);
 
     var row = el("div", "share-row");
-    var more = el(practice ? "button" : "a", "btn" + (practice ? "" : " ghost"), "5 autres phrases →");
-    if (practice) {
-      more.addEventListener("click", function () {
-        game = newPracticeSet();
-        ids = game.ids;
-        items = ids.map(function (id) { return byId[id]; });
-        viewing = -1;
-        justMissed = false;
-        render();
-        window.scrollTo(0, 0);
-      });
-    } else {
-      more.href = "?mode=entrainement";
-    }
+    var more = el("a", "btn ghost", "연습으로 계속 →");
+    more.href = "?mode=entrainement";
     var copy = el("button", "btn", "Copier le résultat");
     copy.addEventListener("click", function () {
       function done() { copy.textContent = "Copié !"; setTimeout(function () { copy.textContent = "Copier le résultat"; }, 1800); }
@@ -701,7 +717,7 @@
         window.prompt("Copiez :", text);
       }
     });
-    if (!practice) row.appendChild(copy);
+    row.appendChild(copy);
     row.appendChild(more);
     card.appendChild(row);
 
@@ -719,14 +735,14 @@
     });
     card.appendChild(recap);
 
-    if (!practice && date === today) {
+    if (date === today) {
       var next = el("p", "next-in");
       card.appendChild(next);
       countdown(next);
     }
 
     var st = stats();
-    if (!practice && st.played) {
+    if (st.played) {
       var grid2 = el("div", "stats");
       [[st.played, "parties"], [st.avg + " %", "réussite"], [st.streak, "série"], [st.best, "record"]].forEach(function (p) {
         var c = el("div");
@@ -751,6 +767,8 @@
   }
 
   // ---------- main ----------
+  document.getElementById(practice ? "mode-practice" : "mode-daily").setAttribute("aria-current", "page");
+
   function render() {
     renderDayNav();
     var main = document.getElementById("game");
