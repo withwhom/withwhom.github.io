@@ -9,3 +9,9 @@
   context: >-
     Kernels, superposition, solution spaces. What is the shared structure
     underneath?
+
+- question: Where does the expansion $$1 + 1/\ln A + 2/(\ln A)^2 + \cdots$$ for the average of $$A^{1/x}$$ over $$[1, A]$$ come from?
+  context: >-
+    I only bounded the spike near $$x = 1$$ and never pinned the constant. It should
+    drop out of integrating $$\int e^w/w^2\,dw$$ by parts plus
+    $$\mathrm{Ei}(c) \sim e^c/c$$.
